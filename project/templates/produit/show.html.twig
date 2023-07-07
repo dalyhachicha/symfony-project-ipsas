@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="{{asset('node_modules/bootstrap/dist/css/bootstrap.css')}}">
+		<link rel="stylesheet" href="{{asset('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')}}">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+		<style>
+			textarea {
+				width: 75%
+			}
+			.rate {
+				float: left;
+				height: 46px;
+				padding: 0 10px;
+			}
+			.rate:not(:checked) > input {
+				display: none;
+			}
+			.rate:not(:checked) > label {
+				float: right;
+				width: 1em;
+				overflow: hidden;
+				white-space: nowrap;
+				cursor: pointer;
+				font-size: 30px;
+				color: #ccc;
+			}
+			.rate:not(:checked) > label:before {
+				content: '★ ';
+			}
+			.rate > input:checked ~ label {
+				color: orange;
+			}
+			.rate:not(:checked) > label:hover,
+			.rate:not(:checked) > label:hover ~ label {
+				color: #deb217;
+			}
+			.rate > input:checked + label:hover,
+			.rate > input:checked + label:hover ~ label,
+			.rate > input:checked ~ label:hover,
+			.rate > input:checked ~ label:hover ~ label,
+			.rate > label:hover ~ input:checked ~ label {
+				color: #c59b08;
+			}
+
+			.checked {
+				color: orange;
+			}
+
+			.commentaire_input_section {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+			.submit_btn {
+				float: right;
+				margin-top: 12px;
+			}
+		</style>
+		<title>Formation</title>
+	</head>
+	<body>
+		<div class="container">
+			<div class="card" style="width: 100%;">
+				<div class="card-header">
+					<div class="row">
+						<div class="col-md-9"><img src="{{ produit.image }}" class="card-img-top" alt="..."></div>
+						<div class="col-md-3">
+							<table class="table">
+								<tbody>
+									<tr>
+										<th scope="row">Produit:</th>
+										<td width="75%">{{ produit.name }}</td>
+									</tr>
+									<tr>
+										<th scope="row">Category</th>
+										<td width="75%">{{ produit.category }}</td>
+									</tr>
+									<tr>
+										<th scope="row">Price</th>
+										<td width="75%">{{ produit.price }}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="card-body">
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col">Note</th>
+								<th scope="col" width="75%">Commentaire</th>
+							</tr>
+						</thead>
+						<tbody>
+							<form action="{{ path('show_produit', {'id': produit.id}) }}" method="post">
+
+								<div class="commentaire_input_section">
+									<div class="rate">
+										<input type="radio" id="star5" name="rate" value="5" required/>
+										<label for="star5" title="text">5 stars</label>
+										<input type="radio" id="star4" name="rate" value="4"/>
+										<label for="star4" title="text">4 stars</label>
+										<input type="radio" id="star3" name="rate" value="3"/>
+										<label for="star3" title="text">3 stars</label>
+										<input type="radio" id="star2" name="rate" value="2"/>
+										<label for="star2" title="text">2 stars</label>
+										<input type="radio" id="star1" name="rate" value="1"/>
+										<label for="star1" title="text">1 star</label>
+									</div>
+									<textarea id="w3review" name="w3review" rows="4" required></textarea>
+								</div>
+								<button class="submit_btn" type="submit">Add Review</button>
+							</form>
+
+							{% for review in produit.reviews %}
+								<tr>
+									<th scope="row">
+										{% set starCount = review.note | default(0) %}
+										{% for i in range(1, 5) %}
+											{% if i <= starCount %}
+												<span class="fa fa-star checked"></span>
+											{% else %}
+												<span class="fa fa-star"></span>
+											{% endif %}
+										{% endfor %}
+									</th>
+									<td width="75%">{{ review.commentaire }}</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+		</div>
+	</body>
+</html>

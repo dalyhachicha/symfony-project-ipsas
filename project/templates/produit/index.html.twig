@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+		<style>
+			.example-wrapper {
+				margin: 1em auto;
+				max-width: 800px;
+				width: 95%;
+				font: 18px / 1.5 sans-serif;
+			}
+			.example-wrapper code {
+				background: #F5F5F5;
+				padding: 2px 6px;
+			}
+			.card-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+			.pagination span a {
+				text-decoration: none;
+			}
+			.pagination span {
+				margin: 0 6px;
+			}
+			#category_input {
+				width: 20%;
+				margin: 0 24px;
+			}
+			.search_wrapper {
+				display: flex;
+				align-items: center;
+				justify-content: flex-end;
+			}
+			.price_wrapper {
+				margin: 0 12px;
+			}
+			.pagination_wrapper {
+				display: flex;
+				align-items: center;
+				justify-content: flex-end;
+			}
+		</style>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="{{asset('node_modules/bootstrap/dist/css/bootstrap.css')}}">
+		<title>Formation</title>
+	</head>
+	<body>
+
+		<section class="content">
+			<div class="container container-fluid"><!-- ============================================================== -->
+				<!-- Start Page Content -->
+				<!-- ============================================================== -->
+			</br>
+			<div class="row">
+				<div class="col-12">
+					<div class="card">
+						<div class="card-header">
+							<h2>
+								Liste des Produits
+							</h2>
+							<div class="search_wrapper">
+								<div class="price_wrapper">
+									<label for="min_price">Min Price:</label>
+									<input type="range" id="min_price" name="min_price" value="{{ app.request.query.get('min_price', 0) }}" min="0" max="1000" oninput="updateRangeOutput('min_price', 'min_price_output')">
+									<output id="min_price_output">{{ app.request.query.get('min_price', 0) }}</output>
+
+								</div>
+								<div class="price_wrapper">
+									<label for="max_price">Max Price:</label>
+									<input type="range" id="max_price" name="max_price" value="{{ app.request.query.get('max_price', 1000) }}" min="0" max="1000" oninput="updateRangeOutput('max_price', 'max_price_output')">
+									<output id="max_price_output">{{ app.request.query.get('max_price', 1000) }}</output>
+								</div>
+								<input id="category_input" type="text" class="form-control" placeholder="Category" value="{{ app.request.query.get('category', "") }}">
+								<button onclick="search()">Search</button>
+							</div>
+						</div>
+
+						<div class="card-body">
+							<div class="row">
+								{% for produit in pagination %}
+									<div class="col-3">
+										<div class="card" onclick="location.href='{{ path('show_produit', {'id': produit.id}) }}';" style="width: 18rem; cursor: pointer;">
+											<h5 class="card-header">{{ produit.name }}
+											</h5>
+											<img class="card-img-top" src="{{ produit.image }}" alt="Card image cap">
+											<div class="card-body">
+												<p class="card-text">Categorie:
+													{{ produit.Category }}</p>
+											</div>
+											<h3 class="card-footer">Prix:
+												{{ produit.Price }}
+											</h3>
+										</div>
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+						<div class="card-footer">
+							<div class="pagination_wrapper">
+								{{ knp_pagination_render(pagination) }}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</body>
+	</body>
+</html></div></section></body><script>function updateRangeOutput(inputId, outputId) {
+const inputElement = document.getElementById(inputId);
+const outputElement = document.getElementById(outputId);
+
+if (outputElement) {
+outputElement.textContent = inputElement.value;
+}
+}
+
+function search() {
+const maxPrice = document.getElementById('max_price').value;
+const minPrice = document.getElementById('min_price').value;
+const category = document.getElementById('category_input').value;
+
+const url = new URL(window.location.href);
+if (maxPrice !== 1000) 
+url.searchParams.set('max_price', maxPrice);
+ else 
+url.searchParams.delete('max_price');
+
+
+
+if (minPrice !== 0) 
+url.searchParams.set('min_price', minPrice);
+ else 
+url.searchParams.delete('min_price');
+
+
+
+if (category.trim().length === 0) 
+url.searchParams.delete('category')
+ else 
+url.searchParams.set('category', category)
+
+
+
+
+
+window.location.href = url;
+}</script></html>
